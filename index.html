@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ODDR: One-Step Deshadow Diffusion via Reward Guidance — efficient one-step shadow removal without real-world paired supervision, guided by ShadowReward, the first annotation-free reward model for shadow removal (NeurIPS 2026).">
+  <meta name="keywords" content="shadow removal, diffusion, reward model, ODDR, ShadowReward, NeurIPS 2026, computer vision">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="ODDR: One-Step Deshadow Diffusion via Reward Guidance">
+  <meta property="og:description" content="Efficient one-step shadow removal without real-world paired supervision, guided by an annotation-free reward model (NeurIPS 2026).">
+  <meta property="og:type" content="website">
+  <title>ODDR: One-Step Deshadow Diffusion via Reward Guidance</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    body { font-family: 'Noto Sans', sans-serif; }
+    .publication-title { font-family: 'Google Sans', sans-serif; }
+    .publication-authors { font-family: 'Google Sans', sans-serif; }
+    .publication-authors a { color: #3273dc !important; }
+    .publication-venue { color: #b58900; font-weight: 700; font-size: 1.25rem; }
+    .link-block { display: inline-block; margin: 0.2rem; }
+    .hero.is-light-grey { background-color: #fafafa; }
+    .figure-caption { font-size: 0.95rem; color: #555; max-width: 860px; margin: 0.75rem auto 0 auto; }
+    .section-title { margin-bottom: 1.5rem; }
+    .content-block { max-width: 960px; margin: 0 auto; }
+    .abstract-text { text-align: justify; }
+    .highlight-box {
+      background: #f0f6ff; border-left: 4px solid #3273dc;
+      padding: 1rem 1.25rem; border-radius: 4px; margin-top: 1.5rem; text-align: left;
+    }
+    .stat-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); padding: 1.5rem 1rem; height: 100%; }
+    .stat-number { font-size: 2.2rem; font-weight: 800; color: #3273dc; font-family: 'Google Sans', sans-serif; }
+    .stat-label { font-size: 0.95rem; color: #666; }
+    pre.bibtex { text-align: left; background: #f5f5f5; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; overflow-x: auto; }
+    .copy-btn { float: right; }
+    footer { padding: 2rem 1rem; font-size: 0.85rem; color: #888; }
+    img.figure-img { border-radius: 6px; }
+  </style>
+</head>
+<body>
+
+<!-- ======================= HERO ======================= -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+      <h1 class="title is-1 publication-title">ODDR: One-Step Deshadow Diffusion<br>via Reward Guidance</h1>
+
+      <div class="is-size-5 publication-authors">
+        <span class="author-block"><a href="https://junsung6140.github.io/">Junseong Shin</a>,</span>
+        <span class="author-block">Kijun Kim,</span>
+        <span class="author-block">Min Seong Kim,</span>
+        <span class="author-block"><a href="https://dongjinkim9.github.io/">Dongjin Kim</a>,</span>
+        <span class="author-block"><a href="https://sites.google.com/view/lliger9/">Tae Hyun Kim</a></span>
+      </div>
+
+      <div class="is-size-5 publication-authors" style="margin-top:0.25rem;">
+        <span class="author-block">Hanyang University, <a href="https://sites.google.com/view/lliger9/">VILAB</a></span>
+      </div>
+
+      <div class="publication-venue" style="margin-top:0.75rem;">NeurIPS 2026</div>
+
+      <div class="publication-links" style="margin-top:1.25rem;">
+        <!-- TODO: uncomment and replace # with the arXiv link when available
+        <span class="link-block">
+          <a href="#" class="button is-dark is-rounded">
+            <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+          </a>
+        </span>
+        -->
+        <span class="link-block">
+          <a href="https://openreview.net/forum?id=IAfKoeRc25" class="button is-dark is-rounded">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+          </a>
+        </span>
+        <!-- TODO: uncomment and replace # with the code repository link
+        <span class="link-block">
+          <a href="#" class="button is-dark is-rounded">
+            <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+          </a>
+        </span>
+        -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TEASER ======================= -->
+<section class="hero is-light-grey">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+      <img src="static/images/intro_perform_ver9.png" alt="ODDR outperforms diffusion-based shadow removal baselines on unseen datasets while using a single denoising step" class="figure-img" style="max-width: 92%;">
+      <p class="figure-caption">
+        <b>One step is all it takes.</b> Compared with diffusion-based shadow removal models
+        (DeS3, SSR), ODDR achieves the best PSNR/RMSE on unseen LRSS and UIUC datasets
+        with a <b>single denoising step (NFE&nbsp;=&nbsp;1)</b>, running at
+        <b>127&nbsp;ms</b> and <b>158&nbsp;GFLOPs</b> — over 5&times; faster and 14&times; lighter than SSR.
+      </p>
+
+      <div class="columns is-centered" style="margin-top:2rem;">
+        <div class="column is-3"><div class="stat-card">
+          <div class="stat-number">1</div>
+          <div class="stat-label">denoising step<br>(vs. 20–25 for prior diffusion models)</div>
+        </div></div>
+        <div class="column is-3"><div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">real-world paired images<br>used for supervision</div>
+        </div></div>
+        <div class="column is-3"><div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">human annotations<br>needed to train the reward model</div>
+        </div></div>
+        <div class="column is-3"><div class="stat-card">
+          <div class="stat-number">5&times;</div>
+          <div class="stat-label">faster inference<br>than SSR (20-step diffusion)</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ABSTRACT ======================= -->
+<section class="section">
+  <div class="container content-block">
+    <h2 class="title is-3 has-text-centered section-title">Abstract</h2>
+    <p class="abstract-text">
+      Recent advances in deep learning for shadow removal have significantly enhanced image quality and realism.
+      However, most approaches rely on real-world paired datasets, which are costly to collect and often limited
+      in scene diversity, leading to limited generalization. To address these limitations, we propose
+      <b>One-step Deshadow Diffusion via Reward guidance (ODDR)</b>, a new framework that achieves efficient and
+      high-fidelity shadow removal without relying on real-world paired supervision. Our method begins with
+      <b>One-step Deshadow Diffusion (ODD)</b>, a baseline model trained on synthetic shadow data for efficient
+      one-step shadow-free reconstruction. We further adapt ODD into ODDR using <b>ShadowReward</b>.
+      In contrast to traditional, annotation-heavy approaches, ShadowReward is the first reward model for shadow
+      removal trained entirely without human annotation. It learns to mimic human perceptual judgments by ranking
+      synthetically generated images with controlled degradations, such as texture distortion and boundary artifacts.
+      This reward-guided fine-tuning enables ODDR to close the synthetic-to-real domain gap.
+      Extensive experiments show that ODD achieves strong performance without relying on real-world paired
+      supervision, and ODDR further improves the results, narrowing the gap to fully supervised methods trained
+      on real-world paired data while maintaining higher computational efficiency as a single-step model.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= METHOD ======================= -->
+<section class="section hero is-light-grey">
+  <div class="container content-block has-text-centered">
+    <h2 class="title is-3 section-title">Method</h2>
+
+    <h3 class="title is-5" style="margin-top:1rem;">Two-Stage Training Pipeline</h3>
+    <img src="static/images/ODDR_pipeline.png" alt="ODDR training pipeline: ODD is trained on synthetic shadows, then fine-tuned into ODDR on real shadow images guided by ShadowReward" class="figure-img" style="max-width: 95%;">
+    <p class="figure-caption">
+      <b>(a)</b> The baseline <b>ODD</b> is trained on synthetic shadow images
+      (x<sub>syn</sub>), optimizing ODD-LoRA and ODD-Conv while the pretrained Stable Diffusion weights stay frozen.
+      <b>(b)</b> <b>ODDR</b> is then fine-tuned from ODD on <i>real</i> shadow images (x<sub>real</sub>) —
+      with no ground truth — guided by the frozen ShadowReward model r<sub>θ</sub>, optimizing only the ODDR-LoRA module.
+    </p>
+
+    <h3 class="title is-5" style="margin-top:3rem;">Human-Annotation-Free Preference Data</h3>
+    <img src="static/images/human_free_dataset_example2.png" alt="Example degradation list with increasing severity used to train ShadowReward without human labels" class="figure-img" style="max-width: 90%;">
+    <p class="figure-caption">
+      We synthesize a perceptually ordered list {x<sup>(j)</sup>} for each clean image by applying controlled
+      degradations (texture distortion, noise, chromatic shift, luminance change, boundary artifacts) of increasing
+      severity to the shadow region. The ordering itself provides the ranking supervision —
+      <b>no human annotation is needed</b>.
+    </p>
+
+    <h3 class="title is-5" style="margin-top:3rem;">ShadowReward</h3>
+    <img src="static/images/reward_figure_ver8.png" alt="ShadowReward architecture: frozen DINOv2 encoder, lightweight convolutional head, Top-K pooling, trained with a ListMLE ranking loss" class="figure-img" style="max-width: 95%;">
+    <p class="figure-caption">
+      ShadowReward encodes the shadow input and a candidate restoration with a frozen <b>DINOv2</b> backbone,
+      scores patches with a lightweight convolutional head, aggregates them via <b>Top-K pooling</b>, and is trained
+      with a <b>ListMLE ranking loss</b> on the ordered degradation lists — the first reward model for shadow removal
+      trained entirely without human annotation.
+    </p>
+
+    <div class="highlight-box">
+      <b>Why does this work?</b> The alignment loss anchors ODDR to the frozen ODD pseudo-target, while the reward
+      term is the only gradient that moves the model beyond ODD. Reward-guided fine-tuning on unpaired real shadow
+      images therefore directly targets the synthetic-to-real gap — improving shadow regions while preserving
+      non-shadow content.
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RESULTS ======================= -->
+<section class="section">
+  <div class="container content-block has-text-centered">
+    <h2 class="title is-3 section-title">Results</h2>
+
+    <h3 class="title is-5">Visual Comparison on AISTD</h3>
+    <img src="static/images/main_visual_comparison_7.jpg" alt="Qualitative comparison on the AISTD benchmark" class="figure-img" style="max-width: 100%;">
+    <p class="figure-caption">
+      ODDR removes shadows cleanly while preserving non-shadow regions, whereas competing methods
+      leave residual shadows or alter regions that should stay unchanged.
+    </p>
+
+    <h3 class="title is-5" style="margin-top:3rem;">Generalization to Unseen Datasets (SRD / LRSS / UIUC)</h3>
+    <img src="static/images/unseen_4.jpg" alt="Qualitative comparison on unseen SRD, LRSS and UIUC datasets" class="figure-img" style="max-width: 100%;">
+    <p class="figure-caption">
+      Without ever training on these datasets, ODDR consistently removes both hard and soft shadows
+      while preserving natural color and structure — demonstrating strong robustness to domain shifts.
+    </p>
+
+    <h3 class="title is-5" style="margin-top:3rem;">Effect of Reward-Guided Fine-Tuning (ODD &rarr; ODDR)</h3>
+    <img src="static/images/ODD_ODDR_2.jpg" alt="Comparison between ODD and reward-fine-tuned ODDR" class="figure-img" style="max-width: 100%;">
+    <p class="figure-caption">
+      ODDR corrects the residual artifacts and color shifts of ODD, yielding cleaner shadow regions
+      and more consistent illumination across the entire image.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= BIBTEX ======================= -->
+<section class="section hero is-light-grey" id="BibTeX">
+  <div class="container content-block">
+    <h2 class="title is-3 has-text-centered section-title">Citation</h2>
+    <button class="button is-small is-link is-light copy-btn" onclick="copyBibtex()">Copy BibTeX</button>
+    <pre class="bibtex" id="bibtex-text">@inproceedings{shin2026oddr,
+    title={ODDR: One-Step Deshadow Diffusion via Reward Guidance},
+    author={Junseong Shin and Kijun Kim and Min Seong Kim and Dongjin Kim and Tae Hyun Kim},
+    booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
+    year={2026}
+}</pre>
+  </div>
+</section>
+
+<footer class="has-text-centered">
+  Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>.
+</footer>
+
+<script>
+function copyBibtex() {
+  const text = document.getElementById('bibtex-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.innerText = 'Copied!';
+    setTimeout(() => { btn.innerText = 'Copy BibTeX'; }, 1500);
+  });
+}
+</script>
+
+</body>
+</html>
