@@ -89,6 +89,8 @@
     .btn-ghost { background: transparent; color: var(--ink); }
     .btn-ghost:hover { background: var(--ink); color: #fff; }
     .btn .arrow { transition: transform .15s; }
+    .btn.is-disabled { opacity: 0.4; pointer-events: none; cursor: default; }
+    .btn .soon { font-size: 12px; font-weight: 500; color: var(--ink-3); }
     .btn:hover .arrow { transform: translateX(3px); }
 
     /* ---------- stats ---------- */
@@ -200,8 +202,11 @@
     <div class="affil">Hanyang University, <a href="https://sites.google.com/view/lliger9/">VILAB</a></div>
 
     <div class="cta">
-      <a class="btn btn-primary" href="https://openreview.net/pdf?id=IAfKoeRc25">Paper <span class="arrow">&rarr;</span></a>
-      <a class="btn btn-ghost" href="https://openreview.net/forum?id=IAfKoeRc25">OpenReview <span class="arrow">&rarr;</span></a>
+      <!-- OpenReview is not public yet (Readers exclude "Everyone").
+           When public: restore href="https://openreview.net/pdf?id=IAfKoeRc25" (Paper, btn-primary)
+           and href="https://openreview.net/forum?id=IAfKoeRc25" (OpenReview), and remove is-disabled. -->
+      <span class="btn btn-ghost is-disabled" aria-disabled="true">Paper <span class="soon">coming soon</span></span>
+      <span class="btn btn-ghost is-disabled" aria-disabled="true">OpenReview <span class="soon">coming soon</span></span>
       <!-- TODO: uncomment and fill in when available
       <a class="btn btn-ghost" href="#">arXiv <span class="arrow">&rarr;</span></a>
       <a class="btn btn-ghost" href="#">Code <span class="arrow">&rarr;</span></a>
